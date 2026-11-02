@@ -13,13 +13,12 @@ From this point on you can access your admin panel at `/admin` of your app URL, 
 
 ### Services
 
-This project uses the following services integrated into Vercel which you will need to click "Add" and "Connect" for:
+This project uses two Vercel-connected services:
 
-Neon Database - Postgres-based cloud database used to host your data
+- **Neon Postgres** — stores Payload users and content. Connect a Neon database to your Vercel project and make sure `POSTGRES_URL` is available in the Production, Preview, and Development environments you use.
+- **Vercel Blob** — stores uploaded media. Create a Blob store and make sure `BLOB_READ_WRITE_TOKEN` is available in the same environments. The Payload Blob adapter is registered as a Payload plugin; client uploads are enabled to support files larger than Vercel's 4.5 MB server-upload limit.
 
-Vercel Blob Storage - object storage used to host your files such as images and videos
-
-The connection variables will automatically be setup for you on Vercel when these services are connected.
+The Payload build command is `next build`; the CI command runs `payload migrate` before the Next.js build.
 
 #### Secrets
 
@@ -38,9 +37,7 @@ After you click the `Deploy` button above, you'll want to have standalone copy o
 ### Development
 
 1. First [clone the repo](#clone) if you have not done so already
-2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `POSTGRES_URL` and `BLOB_READ_WRITE_TOKEN` from your Vercel project to your `.env` if you want to use Vercel Blob and the Neon database that was created for you.
-
-   > _NOTE: If the connection string value includes `localhost` or `127.0.0.1`, the code will automatically use a normal postgres adapter instead of Vercel._. You can override this functionality by setting `forceUseVercelPostgres: true` if desired.
+2. `cd my-project && cp .env.example .env` to copy the example environment variables. Set `POSTGRES_URL`, `PAYLOAD_SECRET`, and `BLOB_READ_WRITE_TOKEN`. Use your Neon connection string for `POSTGRES_URL`, a long random value for `PAYLOAD_SECRET`, and your Vercel Blob read/write token for `BLOB_READ_WRITE_TOKEN`.
 
 3. `pnpm install && pnpm dev` to install dependencies and start the dev server
 4. open `http://localhost:3000` to open the app in your browser
